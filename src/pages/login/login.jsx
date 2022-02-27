@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import api from "../../services/api";
 
 import {
     Grid,
@@ -17,20 +18,30 @@ import {
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 
-const Copyright = () => {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    )
-}
+import GoogleLogin from "react-google-login";
+
+// const Copyright = () => {
+//     return (
+//         <Typography variant="body2" color="text.secondary" align="center">
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://mui.com/">
+//                 Your Website
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     )
+// }
 
 const Login = () => {
+
+    const handleLogin = async googleData => {
+      console.log(googleData);
+      const res = await api.post("/auth/google", {
+        token: googleData.tokenId
+      })
+      console.log(res)
+    }
 
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
@@ -98,6 +109,13 @@ const Login = () => {
               >
                 Sign In
               </Button>
+
+              <GoogleLogin
+                clientId={"787501218586-ugek5e30gsj68th2on26iacae4ufu9je.apps.googleusercontent.com"}
+                buttonText="Log in with Google"
+                onSuccess={handleLogin}
+                onFailure={handleLogin}
+              />
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
@@ -110,7 +128,7 @@ const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>
